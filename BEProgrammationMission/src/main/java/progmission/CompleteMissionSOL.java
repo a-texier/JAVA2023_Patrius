@@ -26,6 +26,7 @@ import fr.cnes.sirius.patrius.utils.exception.PropagationException;
 import reader.Site;
 import utils.ConstantsBE;
 import utils.ProjectUtilities;
+import utils.ProjectUtils;
 import utils.VTSTools;
 
 import java.io.File;
@@ -43,7 +44,7 @@ import java.util.Set;
  *
  * @author herberl
  */
-public class CompleteMission extends SimpleMission {
+public class CompleteMissionSOL extends SimpleMission {
 
     /**
      * Maximum checking interval (s) for the event detection during the orbit
@@ -88,7 +89,7 @@ public class CompleteMission extends SimpleMission {
     private final StrictAttitudeLegsSequence<AttitudeLeg> cinematicPlan;
 
     /**
-     * Constructor for the {@link CompleteMission} class.
+     * Constructor for the {@link CompleteMissionSOL} class.
      *
      * @param missionName   Name of the mission
      * @param numberOfSites Number of target {@link Site} to consider, please give a
@@ -98,7 +99,7 @@ public class CompleteMission extends SimpleMission {
      *                               {@link FramesFactory}
      * @throws IllegalStateException if the mission horizon is too short
      */
-    public CompleteMission(final String missionName, int numberOfSites) throws PatriusException {
+    public CompleteMissionSOL(final String missionName, int numberOfSites) throws PatriusException {
 
         // Since this class extends the SimpleMission class, we need to use the super
         // constructor to instantiate our instance of CompleteMission. All the
@@ -153,7 +154,7 @@ public class CompleteMission extends SimpleMission {
         for (Site targetSite : this.getSiteList()) {
             Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
             accessPlan.put(targetSite, siteAccessTimeline);
-            ProjectUtilities.printTimeline(siteAccessTimeline);
+            ProjectUtils.printTimeline(siteAccessTimeline);
         }
         /*
         Site targetSite = this.getSiteList().get(0);
@@ -872,7 +873,7 @@ public class CompleteMission extends SimpleMission {
                 this.getSatellite().getPropagator().getPvProvider(), endDate, this.getEme2000());
         
         // while error in slew duration is greater than tolerance
-        while (error > CompleteMission.SLEW_MARGIN) {
+        while (error > CompleteMissionSOL.SLEW_MARGIN) {
                 // compute the slew duration between the two attitudes
                 slewDuration = this.getSatellite().computeSlewDuration(attitude1, attitude2);
 
@@ -893,9 +894,9 @@ public class CompleteMission extends SimpleMission {
         }
         // add tolerance to the adaptable date to ensure feasibility
         if (forward) {
-                endDate = endDate.shiftedBy(CompleteMission.SLEW_MARGIN);
+                endDate = endDate.shiftedBy(CompleteMissionSOL.SLEW_MARGIN);
         } else {
-                beginDate = beginDate.shiftedBy(-CompleteMission.SLEW_MARGIN);
+                beginDate = beginDate.shiftedBy(-CompleteMissionSOL.SLEW_MARGIN);
         }
         // process the final attitudes
         attitude1 = attitudeProvider1.getAttitude(this.getSatellite().getPropagator().getPvProvider(), beginDate, this.getEme2000());

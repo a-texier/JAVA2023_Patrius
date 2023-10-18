@@ -9,11 +9,11 @@ import fr.cnes.sirius.patrius.attitudes.AttitudeLeg;
 import fr.cnes.sirius.patrius.attitudes.StrictAttitudeLegsSequence;
 import fr.cnes.sirius.patrius.events.postprocessing.Timeline;
 import fr.cnes.sirius.patrius.utils.exception.PatriusException;
-import progmission.CompleteMission;
+import progmission.CompleteMissionSOL;
 import reader.Site;
 import utils.LogUtils;
 
-public class CompleteMissionMainSOL {
+public class CompleteMissionSOLMain {
 	
 	/**
 	 * Logger for this class.
@@ -32,7 +32,7 @@ public class CompleteMissionMainSOL {
 		double t0 = System.currentTimeMillis();
 
 		// Instantiating our mission using the CompleteMission object.
-		final CompleteMission mission = new CompleteMission("BE Supaero mission", 10);
+		final CompleteMissionSOL mission = new CompleteMissionSOL("BE Supaero mission", 10);
 		LOGGER.info("Complete simulation starting ...");
 		LOGGER.info(mission.toString());
 

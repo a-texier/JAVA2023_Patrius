@@ -164,7 +164,7 @@ public class CompleteMission extends SimpleMission {
 		 */	
 	
 		for (int i = 0; i < this.getSiteList().size(); i++) {
-			if (i<1) {
+			if (i<2) {
 			    final Site targetSite = this.getSiteList().get(i);
 			    final Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
 			    this.accessPlan.put(targetSite, siteAccessTimeline);
@@ -175,7 +175,6 @@ public class CompleteMission extends SimpleMission {
 	    final Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
 		this.accessPlan.put(targetSite, siteAccessTimeline);
 		ProjectUtils.printTimeline(siteAccessTimeline);**/
-		
 		return this.accessPlan;
 	}
 
@@ -496,10 +495,8 @@ public class CompleteMission extends SimpleMission {
 		 */
 		final Timeline timeline1 = createSiteVisibilityTimeline(targetSite);
 	    final Timeline timeline2 = createSunIncidenceTimeline(targetSite);
-
 	    final Timeline timeline3 = createDazzlingTimeline(targetSite);
-
-		/**
+	    		/**
 		 * Step 2 :
 		 * 
 		 * Combine the timelines with logical gates and retrieve only the access
@@ -532,31 +529,32 @@ public class CompleteMission extends SimpleMission {
 		for (final Phenomenon phenom : timeline3.getPhenomenaList()) {
 			siteAccessTimeline.addPhenomenon(phenom);
 		}
-
+		//System.out.println(timeline3.getPhenomenaList());
+		
 		// Define and use your own criteria, here is an example (use the right strings
 		// defined when naming the phenomenon in the GenericCodingEventDetector)
-		final AndCriterion andCriterion1 = new AndCriterion("Visibility Event", "Sun Incidence Event",
-				"Visbility AND Sun Incidence", "Logical gate AND between Visbility and Sun indidence");
+		final AndCriterion andCriterion1 = new AndCriterion("Visibility Event", "SunIncidence Event",
+				"Visibility AND SunIncidence", "Logical gate AND between Visbility and Sun indidence");
 		// Applying our criterion adds all the new phenonmena inside the global timeline
 		andCriterion1.applyTo(siteAccessTimeline);
 		
 		// Define and use your own criteria, here is an example (use the right strings
 		// defined when naming the phenomenon in the GenericCodingEventDetector)
-		final AndCriterion andCriterion2 = new AndCriterion("Visibility Event", "Sun Phase Event", "Visbility AND Sun Phase", "Logical gate AND between Visbility and Sun Phase");
+		final AndCriterion andCriterion2 = new AndCriterion("Visibility AND SunIncidence", "Dazzling Event", "Visibility AND SunIncidence AND Dazzling", "Logical gate AND between Visbility and Sun Phase");
 		// Applying our criterion adds all the new phenonmena inside the global timeline
 		andCriterion2.applyTo(siteAccessTimeline);
 		
 		// Then create an ElementTypeFilter that will filter all phenomenon not
 		// respecting the input condition you gave it
-		final ElementTypeFilter obsConditionFilter1 = new ElementTypeFilter("Visbility AND Sun Incidence", false);
+		final ElementTypeFilter obsConditionFilter1 = new ElementTypeFilter("Visibility AND SunIncidence AND Dazzling", false);
 		// Finally, we filter the global timeline to keep only X1 AND X2 phenomena
 		obsConditionFilter1.applyTo(siteAccessTimeline);
 		
 		// Then create an ElementTypeFilter that will filter all phenomenon not
 		// respecting the input condition you gave it
-		final ElementTypeFilter obsConditionFilter2 = new ElementTypeFilter("Visbility AND Sun Phase", false);
+		//final ElementTypeFilter obsConditionFilter2 = new ElementTypeFilter("Visibility AND Dazzling", false);
 		// Finally, we filter the global timeline to keep only X1 AND X2 phenomena
-		obsConditionFilter2.applyTo(siteAccessTimeline);
+		//obsConditionFilter2.applyTo(siteAccessTimeline);
 
 		/*
 		 * Now make sure your globalTimeline represents the access Timeline for the
@@ -567,7 +565,7 @@ public class CompleteMission extends SimpleMission {
 		// Log the final access timeline associated to the current target
 		logger.info("\n" + targetSite.getName());
 		ProjectUtils.printTimeline(siteAccessTimeline);
-
+		System.out.println(siteAccessTimeline.getPhenomenaList());
 		return siteAccessTimeline;
 	}
 
@@ -615,63 +613,64 @@ public class CompleteMission extends SimpleMission {
 		//Step 5 :
 		
 		final Timeline phenomenonVisibilityTimeline = new Timeline(eventVisibilityLogger,
-				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), null);
+				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), this.getSatellite().getSpacecraftState());
 		return phenomenonVisibilityTimeline;
 	}
 
-	
 	private Timeline createSunIncidenceTimeline(Site targetSite) throws PatriusException {
-		//Step 1 :
-	    final EventDetector constraintVisibilityDetector = createConstraintSunIncidenceDetector(targetSite);
-	    //Step 2 :
-		this.getSatellite().getPropagator().addEventDetector(constraintVisibilityDetector);
+		// Step 1 :
+		final EventDetector constraintSunIncidenceDetector = createConstraintSunIncidenceDetector(targetSite);
+		// Step 2 :
+		this.getSatellite().getPropagator().addEventDetector(constraintSunIncidenceDetector);
 
-		//Step 3 :
-		GenericCodingEventDetector codingEventVisibilityDetector = new GenericCodingEventDetector(constraintVisibilityDetector,
-                "Visibility Start", "Visibility End", true, "Visibility Event");
-		final CodedEventsLogger eventVisibilityLogger = new CodedEventsLogger();
-		
-		final EventDetector eventVisibilityDetector = eventVisibilityLogger.monitorDetector(codingEventVisibilityDetector);
-		//System.out.println(eventVisibilityDetector);
+		// Step 3 :
+		GenericCodingEventDetector codingEventSunIncidenceDetector = new GenericCodingEventDetector(
+				constraintSunIncidenceDetector, "SunIncidence Start", "SunIncidence End", true, "SunIncidence Event");
+		final CodedEventsLogger eventSunIncidenceLogger = new CodedEventsLogger();
+
+		final EventDetector eventSunIncidenceDetector = eventSunIncidenceLogger
+				.monitorDetector(codingEventSunIncidenceDetector);
+		// System.out.println(eventSunIncidenceDetector);
 		// Then you add your logger to the propagator, it will monitor the event coded
 		// by the codingEventDetector
-		this.getSatellite().getPropagator().addEventDetector(eventVisibilityDetector);
+		this.getSatellite().getPropagator().addEventDetector(eventSunIncidenceDetector);
 
-		//Step 4 :
+		// Step 4 :
 		this.getSatellite().getPropagator().propagate(this.getStartDate(), this.getEndDate());
-		
-		//Step 5 :
-		
-		final Timeline phenomenonVisibilityTimeline = new Timeline(eventVisibilityLogger,
-				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), null);
-		return phenomenonVisibilityTimeline;
+
+		// Step 5 :
+
+		final Timeline phenomenonSunIncidenceTimeline = new Timeline(eventSunIncidenceLogger,
+				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), this.getSatellite().getSpacecraftState());
+		return phenomenonSunIncidenceTimeline;
 	}
 
 	private Timeline createDazzlingTimeline(Site targetSite) throws PatriusException {
 		//Step 1 :
-	    final EventDetector constraintVisibilityDetector = createConstraintDazzlingDetector(targetSite);
+	    final EventDetector constraintDazzlingDetector = createConstraintDazzlingDetector(targetSite);
 	    //Step 2 :
-		this.getSatellite().getPropagator().addEventDetector(constraintVisibilityDetector);
+		this.getSatellite().getPropagator().addEventDetector(constraintDazzlingDetector);
 
 		//Step 3 :
-		GenericCodingEventDetector codingEventVisibilityDetector = new GenericCodingEventDetector(constraintVisibilityDetector,
-                "Visibility Start", "Visibility End", true, "Visibility Event");
-		final CodedEventsLogger eventVisibilityLogger = new CodedEventsLogger();
+		GenericCodingEventDetector codingEventDazzlingDetector = new GenericCodingEventDetector(constraintDazzlingDetector,
+                "Dazzling Start", "Dazzling End", true, "Dazzling Event");
+		final CodedEventsLogger eventDazzlingLogger = new CodedEventsLogger();
 		
-		final EventDetector eventVisibilityDetector = eventVisibilityLogger.monitorDetector(codingEventVisibilityDetector);
-		//System.out.println(eventVisibilityDetector);
+		final EventDetector eventDazzlingDetector = eventDazzlingLogger.monitorDetector(codingEventDazzlingDetector);
+		//System.out.println(eventDazzlingDetector);
 		// Then you add your logger to the propagator, it will monitor the event coded
 		// by the codingEventDetector
-		this.getSatellite().getPropagator().addEventDetector(eventVisibilityDetector);
+		this.getSatellite().getPropagator().addEventDetector(eventDazzlingDetector);
 
 		//Step 4 :
 		this.getSatellite().getPropagator().propagate(this.getStartDate(), this.getEndDate());
 		
 		//Step 5 :
 		
-		final Timeline phenomenonVisibilityTimeline = new Timeline(eventVisibilityLogger,
-				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), null);
-		return phenomenonVisibilityTimeline;
+		final Timeline phenomenonDazzlingTimeline = new Timeline(eventDazzlingLogger,
+				new AbsoluteDateInterval(this.getStartDate(), this.getEndDate()), this.getSatellite().getSpacecraftState());
+		System.out.println(phenomenonDazzlingTimeline);
+		return phenomenonDazzlingTimeline;
 	}
 	
 	private Timeline createSiteXTimeline(Site targetSite) throws PatriusException {
@@ -980,7 +979,7 @@ public class CompleteMission extends SimpleMission {
         
 	    // Créez un détecteur pour l'angle d'incidence du soleil
 	    ThreeBodiesAngleDetector sunIncidenceDetector = new ThreeBodiesAngleDetector(
-	    		sun, earth, stationModel ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE,MAXCHECK_EVENTS, TRESHOLD_EVENTS);
+	    		sun, earth, stationModel ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS,EventDetector.Action.CONTINUE);
 	    
 	   
 
@@ -1003,7 +1002,7 @@ public class CompleteMission extends SimpleMission {
         		targFrame, targField);
 	    // Créez un détecteur pour l'angle d'incidence du soleil
 	    ThreeBodiesAngleDetector Dazzling = new ThreeBodiesAngleDetector(
-	    		this.getSatellite().getPropagator().getPvProvider(), sun, stationModel ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE,MAXCHECK_EVENTS, TRESHOLD_EVENTS, EventDetector.Action.CONTINUE);
+	    		this.getSatellite().getPropagator().getPvProvider(), stationModel,sun ,ConstantsBE.MAX_SUN_PHASE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS, EventDetector.Action.CONTINUE);
 	    
 	  
 	    return Dazzling;
