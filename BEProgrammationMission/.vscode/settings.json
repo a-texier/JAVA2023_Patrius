@@ -1,0 +1,47 @@
+{
+    "svn.ignoreMissingSvnWarning": true,
+    "java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.8.101-hotspot",
+    "workbench.settings.useSplitJSON": true,
+    "json.schemas": [
+
+    ],
+    "java.showBuildStatusOnStart.enabled": "notification",
+    "java.autobuild.enabled": true,
+    "java.project.exportJar.targetPath": "",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "jars/commons-beanutils-1.9.4.jar",
+        "jars/commons-beanutils-1.9.4-sources.jar",
+        "jars/commons-collections-3.2.2.jar",
+        "jars/commons-collections-3.2.2-sources.jar",
+        "jars/commons-lang3-3.12.0.jar",
+        "jars/commons-lang3-3.12.0-sources.jar",
+        "jars/commons-logging-1.2.jar",
+        "jars/commons-logging-1.2-sources.jar",
+        "jars/commons-text-1.9.jar",
+        "jars/commons-text-1.9-sources.jar",
+        "jars/hamcrest-core-1.3.jar",
+        "jars/junit-4.13.2.jar",
+        "jars/junit-4.13.2-javadoc.jar",
+        "jars/junit-4.13.2-sources.jar",
+        "jars/logback-classic-1.3.6.jar",
+        "jars/logback-classic-1.3.6-javadoc.jar",
+        "jars/logback-classic-1.3.6-sources.jar",
+        "jars/logback-core-1.3.6.jar",
+        "jars/logback-core-1.3.6-javadoc.jar",
+        "jars/logback-core-1.3.6-sources.jar",
+        "jars/opencsv-5.7.0.jar",
+        "jars/opencsv-5.7.0-javadoc.jar",
+        "jars/opencsv-5.7.0-sources.jar",
+        "jars/patrius-4.9.1.jar",
+        "jars/patrius-4.9.1-javadoc.jar",
+        "jars/patrius-4.9.1-sources.jar",
+        "jars/patriusdataset-1.4.0.jar",
+        "jars/patriusdataset-1.4.0-javadoc.jar",
+        "jars/patriusdataset-1.4.0-sources.jar",
+        "jars/slf4j-api-2.0.7.jar",
+        "jars/slf4j-api-2.0.7-javadoc.jar",
+        "jars/slf4j-api-2.0.7-sources.jar"
+    ]
+    
+}

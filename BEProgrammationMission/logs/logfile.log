@@ -1,0 +1,18 @@
+[12:32:43] INFO BEProgMissionLogger | ##################################################
+[12:32:45] INFO BEProgMissionLogger | Complete simulation starting ...
+[12:32:45] INFO BEProgMissionLogger | CompleteMission [name=BE Supaero mission, startDate=2010-09-01T00:00:00.000, endDate=2010-09-10T00:00:00.000, satellite=Pleiades 1A]
+[12:32:51] INFO BEProgMissionLogger | 
+PARIS
+[12:32:51] INFO BEProgMissionLogger | ____ Printing Timeline ____
+[12:32:51] INFO BEProgMissionLogger | ___________________________
+[12:32:51] INFO BEProgMissionLogger | ____ Printing Timeline ____
+[12:32:51] INFO BEProgMissionLogger | ___________________________
+[12:32:51] INFO BEProgMissionLogger | {PARIS=fr.cnes.sirius.patrius.events.postprocessing.Timeline@60df60da}
+[12:32:51] INFO BEProgMissionLogger | Current target site : PARIS
+[12:32:51] INFO BEProgMissionLogger | {}
+[12:32:51] INFO BEProgMissionLogger | Duration of the score computation : 0.0
+[12:32:51] INFO BEProgMissionLogger | Total duration : 8.743
+[12:32:51] INFO BEProgMissionLogger | 
+
+Simulation done
+[12:32:51] INFO BEProgMissionLogger | ##################################################
