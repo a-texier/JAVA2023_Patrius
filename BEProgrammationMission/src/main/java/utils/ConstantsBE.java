@@ -30,7 +30,7 @@ public interface ConstantsBE {
 	public static final AbsoluteDate START_DATE = new AbsoluteDate("2010-09-01T00:00:00", TIME_SCALE);
 
 	/** Final analysis date. */
-	public static final AbsoluteDate END_DATE = new AbsoluteDate("2010-09-10T00:00:00", TIME_SCALE);
+	public static final AbsoluteDate END_DATE = new AbsoluteDate("2010-09-08T00:00:00", TIME_SCALE);
 
 	// Orbital parameters
 

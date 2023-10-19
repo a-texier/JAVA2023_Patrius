@@ -13,6 +13,7 @@ import fr.cnes.sirius.patrius.attitudes.AttitudeLeg;
 import fr.cnes.sirius.patrius.attitudes.AttitudeProvider;
 import fr.cnes.sirius.patrius.attitudes.ConstantSpinSlew;
 import fr.cnes.sirius.patrius.attitudes.StrictAttitudeLegsSequence;
+import fr.cnes.sirius.patrius.attitudes.TargetGroundPointing;
 import fr.cnes.sirius.patrius.events.CodedEvent;
 import fr.cnes.sirius.patrius.events.CodedEventsLogger;
 import fr.cnes.sirius.patrius.events.GenericCodingEventDetector;
@@ -283,6 +284,9 @@ public class CompleteMission extends SimpleMission {
 				 * we provide with this.getEME2000()).
 				 */
 				// Getting the begining/end of the accessIntervall as AbsoluteDate objects
+				
+				
+				
 				final AbsoluteDate date1 = accessInterval.getLowerData();
 				final AbsoluteDate date2 = accessInterval.getUpperData();
 				final Attitude attitude1 = observationLaw.getAttitude(this.createDefaultPropagator(), date1,
@@ -625,7 +629,7 @@ public class CompleteMission extends SimpleMission {
 
 		// Step 3 :
 		GenericCodingEventDetector codingEventSunIncidenceDetector = new GenericCodingEventDetector(
-				constraintSunIncidenceDetector, "SunIncidence Start", "SunIncidence End", true, "SunIncidence Event");
+				constraintSunIncidenceDetector, "SunIncidence Start", "SunIncidence End", false, "SunIncidence Event");
 		final CodedEventsLogger eventSunIncidenceLogger = new CodedEventsLogger();
 
 		final EventDetector eventSunIncidenceDetector = eventSunIncidenceLogger
@@ -653,7 +657,7 @@ public class CompleteMission extends SimpleMission {
 
 		//Step 3 :
 		GenericCodingEventDetector codingEventDazzlingDetector = new GenericCodingEventDetector(constraintDazzlingDetector,
-                "Dazzling Start", "Dazzling End", true, "Dazzling Event");
+                "Dazzling Start", "Dazzling End", false, "Dazzling Event");
 		final CodedEventsLogger eventDazzlingLogger = new CodedEventsLogger();
 		
 		final EventDetector eventDazzlingDetector = eventDazzlingLogger.monitorDetector(codingEventDazzlingDetector);
@@ -949,16 +953,6 @@ public class CompleteMission extends SimpleMission {
 		EventDetector visibilityDetector = new SensorVisibilityDetector(sensorModel, MAXCHECK_EVENTS, TRESHOLD_EVENTS,
 				EventDetector.Action.CONTINUE, EventDetector.Action.CONTINUE);
 		
-		/*
-		// Créez un détecteur pour l'angle d'incidence du soleil (condition d'éclairage)
-		ThreeBodiesAngleDetector sunIncidenceDetector = new ThreeBodiesAngleDetector(MAXCHECK_EVENTS, TRESHOLD_EVENTS, Action.CONTINUE,
-		    CelestialBodyFactory.getSun(), CelestialBodyFactory.getEarth(), satellite);
-
-		// Créez un détecteur pour l'éblouissement
-		ThreeBodiesAngleDetector dazzlingDetector = new ThreeBodiesAngleDetector(MAXCHECK_EVENTS, TRESHOLD_EVENTS, Action.CONTINUE,
-		    terre, terre, satellite);
-		
-		*/
 		
 		return visibilityDetector;
 	}
@@ -979,7 +973,7 @@ public class CompleteMission extends SimpleMission {
         
 	    // Créez un détecteur pour l'angle d'incidence du soleil
 	    ThreeBodiesAngleDetector sunIncidenceDetector = new ThreeBodiesAngleDetector(
-	    		sun, earth, stationModel ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS,EventDetector.Action.CONTINUE);
+	    		stationModel, earth, sun ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS,EventDetector.Action.CONTINUE);
 	    
 	   
 
@@ -1043,7 +1037,10 @@ public class CompleteMission extends SimpleMission {
 		/*
 		 * Complete the code below to create your observation law and return it
 		 */
-		return null;
+		TargetGroundPointing TargetGroundPointing =  new TargetGroundPointing(this.getEarth(), target.getPoint());
+		
+		
+		return TargetGroundPointing;
 	}
 
 	

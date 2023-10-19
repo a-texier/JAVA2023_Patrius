@@ -83,16 +83,16 @@ public class SimpleMission {
 	private final CelestialBody sun;
 
 	/** Initial date of the mission. */
-	public final AbsoluteDate startDate;
+	private final AbsoluteDate startDate;
 
 	/** Final date of the mission. */
-	public final AbsoluteDate endDate;
+	private final AbsoluteDate endDate;
 
 	/**
 	 * Mission satellite object. The {@link Satellite} is a custom class developped
 	 * in the context of the BEProgrammationMission project.
 	 */
-	public final Satellite satellite;
+	private final Satellite satellite;
 
 	/**
 	 * {@link List} of {@link Site} objects, representing the list of observation
