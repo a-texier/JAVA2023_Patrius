@@ -165,12 +165,12 @@ public class CompleteMission extends SimpleMission {
 		 */	
 	
 		for (int i = 0; i < this.getSiteList().size(); i++) {
-			if (i<2) {
+
 			    final Site targetSite = this.getSiteList().get(i);
 			    final Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
 			    this.accessPlan.put(targetSite, siteAccessTimeline);
 			    ProjectUtils.printTimeline(siteAccessTimeline);
-			    }
+			    
 		}
 	    /**final Site targetSite = this.getSiteList().get(0);
 	    final Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
@@ -931,22 +931,22 @@ public class CompleteMission extends SimpleMission {
 		// Créez un modèle de capteur (SensorModel) pour représenter la visibilité
 		SensorModel sensorModel = new SensorModel(this.getSatellite().getAssembly(), "sensor");
 
-		CelestialBody earth = CelestialBodyFactory.getEarth();
+		//CelestialBody earth = CelestialBodyFactory.getEarth();
 		
 		// Ajoutez la Terre comme corps masquant (masking body)
-		sensorModel.addMaskingCelestialBody(earth.getShape());
+		sensorModel.addMaskingCelestialBody(this.getEarth()); // pq diff de earth.getShape() ??
 
         // target
         GeodeticPoint targ = targetSite.getPoint();
 
         // Repère topocentrique basé sur la target
-        final TopocentricFrame targFrame = new TopocentricFrame(earth.getShape(), targ, targ.getName());
-        final CircularField targField = new CircularField("TargetField",
-                FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
-        final GeometricStationAntenna stationModel = new GeometricStationAntenna(
-        		targFrame, targField);
+        final TopocentricFrame targFrame = new TopocentricFrame(this.getEarth(), targ, targ.getName());
+        //final CircularField targField = new CircularField("TargetField",
+        //        FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
+        //final GeometricStationAntenna stationModel = new GeometricStationAntenna(
+        //		targFrame, targField);
 		// Utilisez la méthode setMainTarget avec PVCoordinatesProvider
-		sensorModel.setMainTarget(stationModel, new ConstantRadiusProvider(0.));
+		sensorModel.setMainTarget(targFrame, new ConstantRadiusProvider(0.));
 		
 		
 		// Créez un détecteur de visibilité en utilisant le modèle de capteur
@@ -965,15 +965,15 @@ public class CompleteMission extends SimpleMission {
         GeodeticPoint targ = targetSite.getPoint();
 
         // Repère topocentrique basé sur la target
-        final TopocentricFrame targFrame = new TopocentricFrame(earth.getShape(), targ, targ.getName());
-        final CircularField targField = new CircularField("TargetField",
-                FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
-        final GeometricStationAntenna stationModel = new GeometricStationAntenna(
-        		targFrame, targField);
+        final TopocentricFrame targFrame = new TopocentricFrame(this.getEarth(), targ, targ.getName());
+        //final CircularField targField = new CircularField("TargetField",
+        //        FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
+        //final GeometricStationAntenna stationModel = new GeometricStationAntenna(
+        //		targFrame, targField);
         
 	    // Créez un détecteur pour l'angle d'incidence du soleil
 	    ThreeBodiesAngleDetector sunIncidenceDetector = new ThreeBodiesAngleDetector(
-	    		stationModel, earth, sun ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS,EventDetector.Action.CONTINUE);
+	    		targFrame, earth, sun ,ConstantsBE.MAX_SUN_INCIDENCE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS,EventDetector.Action.CONTINUE);
 	    
 	   
 
@@ -989,14 +989,14 @@ public class CompleteMission extends SimpleMission {
         GeodeticPoint targ = targetSite.getPoint();
 
         // Repère topocentrique basé sur la target
-        final TopocentricFrame targFrame = new TopocentricFrame(earth.getShape(), targ, targ.getName());
-        final CircularField targField = new CircularField("TargetField",
-                FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
-        final GeometricStationAntenna stationModel = new GeometricStationAntenna(
-        		targFrame, targField);
+        final TopocentricFrame targFrame = new TopocentricFrame(this.getEarth(), targ, targ.getName());
+        //final CircularField targField = new CircularField("TargetField",
+        //       FastMath.PI*ConstantsBE.POINTING_CAPACITY / 180, Vector3D.PLUS_K);
+        //final GeometricStationAntenna stationModel = new GeometricStationAntenna(
+        //		targFrame, targField);
 	    // Créez un détecteur pour l'angle d'incidence du soleil
 	    ThreeBodiesAngleDetector Dazzling = new ThreeBodiesAngleDetector(
-	    		this.getSatellite().getPropagator().getPvProvider(), stationModel,sun ,ConstantsBE.MAX_SUN_PHASE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS, EventDetector.Action.CONTINUE);
+	    		this.getSatellite().getPropagator().getPvProvider(), targFrame,sun ,ConstantsBE.MAX_SUN_PHASE_ANGLE*FastMath.PI/180,MAXCHECK_EVENTS, TRESHOLD_EVENTS, EventDetector.Action.CONTINUE);
 	    
 	  
 	    return Dazzling;
