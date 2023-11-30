@@ -169,7 +169,7 @@ public class CompleteMission extends SimpleMission {
 			    final Site targetSite = this.getSiteList().get(i);
 			    final Timeline siteAccessTimeline = createSiteAccessTimeline(targetSite);
 			    this.accessPlan.put(targetSite, siteAccessTimeline);
-			    ProjectUtils.printTimeline(siteAccessTimeline);
+			    //ProjectUtils.printTimeline(siteAccessTimeline);
 			    
 		}
 	    /**final Site targetSite = this.getSiteList().get(0);
